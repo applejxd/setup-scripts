@@ -1,20 +1,13 @@
 #!/bin/sh
 
-if [ $# -eq 0 ]; then
-    # save password
-    read -sp "Password: " password
-else
-    password=$1
-fi
-
-echo "$password" | sudo -S apt update
+sudo apt update
 
 mkdir -p ~/src
 cd ~/src
 
 if !(type "jq" >/dev/null 2>&1); then
     # for parse json
-    echo "$password" | sudo -S apt install -y jq
+    sudo apt install -y jq
 fi
 
 response=$(curl https://api.github.com/repos/SoftEtherVPN/SoftEtherVPN_Stable/releases/latest)
@@ -24,7 +17,7 @@ wget $download_url
 tar zxvf $file_name
 
 if !(type "make" >/dev/null 2>&1); then
-    echo "$password" | sudo -S apt install -y build-essential
+    sudo apt install -y build-essential
 fi
 
 cd vpnserver
@@ -33,5 +26,5 @@ find . -type f -print | xargs chmod 600
 find . -type d -print | xargs chmod 700
 chmod u+x .install.sh vpncmd vpnserver
 cd ~/src
-echo "$password" | sudo -S cp -rp vpnserver /usr/local/
-echo "$password" | sudo -S chown -R root:root /usr/local/vpnserver/
+sudo cp -rp vpnserver /usr/local/
+sudo chown -R root:root /usr/local/vpnserver/
