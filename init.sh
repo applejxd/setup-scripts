@@ -9,8 +9,8 @@ fi
 
 echo "$password" | sudo -S apt update
 
-mkdir -p ~/src/vpnserver/
-cd ~/src/vpnserver/
+mkdir -p ~/src/
+cd ~/src/
 
 if !(type "jq" >/dev/null 2>&1); then
     # for parse json
@@ -29,8 +29,8 @@ fi
 
 cd vpnserver
 yes 1 | make
-echo "$password" | sudo -S sh -c "find . -type f | chmod 600"
-echo "$password" | sudo -S sh -c "find . -type d | chmod 700"
+echo "$password" | sudo -S sh -c "find -name . -type f -print | xargs chmod 600"
+echo "$password" | sudo -S sh -c "find -name . -type d -print | xargs chmod 700"
 echo "$password" | sudo -S chmod u+x .install.sh vpncmd vpnserver
 echo "$password" | sudo -S cp -rp vpnserver /usr/local/
 echo "$password" | sudo -S chown -R root:root /usr/local/vpnserver/
