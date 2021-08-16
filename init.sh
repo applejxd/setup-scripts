@@ -29,8 +29,8 @@ fi
 
 cd vpnserver
 yes 1 | make
-echo "$password" | sudo -S sh -c "find . -type f -exec chmod 600 {} \;"
-echo "$password" | sudo -S sh -c "find . -type d -exec chmod 700 {} \;"
+find . -type f -print | xargs chmod 600
+find . -type d -print | xargs chmod 700
 echo "$password" | sudo -S chmod u+x .install.sh vpncmd vpnserver
 echo "$password" | sudo -S cp -rp vpnserver /usr/local/
 echo "$password" | sudo -S chown -R root:root /usr/local/vpnserver/
