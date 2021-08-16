@@ -25,8 +25,8 @@ tar zxvf $file_name
 
 cd vpnserver
 yes 1 | make
-find . -type f | chmod 600
-find . -type d | chmod 700
-chmod u+x .install.sh vpncmd vpnserver
-sudo cp -rp vpnserver /usr/local/
-sudo chown -R root:root /usr/local/vpnserver/
+echo "$password" | sudo -S sh -c "find . -type f | chmod 600"
+echo "$password" | sudo -S sh -c "find . -type d | chmod 700"
+echo "$password" | sudo -S chmod u+x .install.sh vpncmd vpnserver
+echo "$password" | sudo -S cp -rp vpnserver /usr/local/
+echo "$password" | sudo -S chown -R root:root /usr/local/vpnserver/
