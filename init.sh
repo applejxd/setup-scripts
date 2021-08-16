@@ -9,8 +9,8 @@ fi
 
 echo "$password" | sudo -S apt update
 
-mkdir -p ~/src/
-cd ~/src/
+mkdir -p ~/src/vpnserver
+cd ~/src/vpnserver
 
 if !(type "jq" >/dev/null 2>&1); then
     # for parse json
