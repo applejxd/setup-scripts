@@ -9,19 +9,23 @@ fi
 
 echo "$password" | sudo -S apt update
 
+mkdir -p ~/src/vpnserver/
+cd ~/src/vpnserver/
+
 if !(type "jq" >/dev/null 2>&1); then
     # for parse json
     echo "$password" | sudo -S apt install -y jq
 fi
-
-mkdir -p ~/src/vpnserver/
-cd ~/src/vpnserver/
 
 response=$(curl https://api.github.com/repos/SoftEtherVPN/SoftEtherVPN_Stable/releases/latest)
 download_url=$(echo $response | jq ".assets[38].browser_download_url" | sed 's/"//g')
 file_name=$(echo $response | jq ".assets[38].name" | sed 's/"//g')
 wget $download_url
 tar zxvf $file_name
+
+if !(type "make" >/dev/null 2>&1); then
+    echo "$password" | sudo -S apt install -y build-essential
+fi
 
 cd vpnserver
 yes 1 | make
