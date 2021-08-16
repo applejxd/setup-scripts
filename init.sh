@@ -28,3 +28,29 @@ chmod u+x .install.sh vpncmd vpnserver
 cd ~/src
 sudo cp -rp vpnserver /usr/local/
 sudo chown -R root:root /usr/local/vpnserver/
+
+cat <<EOF > /etc/systemd/system/vpnserver.service
+[Unit]
+Description=SoftEther VPN Server
+After=network.target auditd.service
+ConditionPathExists=!/usr/local/vpnserver/do_not_run
+
+[Service]
+Type=forking
+EnvironmentFile=-/usr/local/vpnserver
+ExecStart=/usr/local/vpnserver/vpnserver start
+ExecStop=/usr/local/vpnserver/vpnserver stop
+KillMode=process
+Restart=on-failure
+
+# Hardening
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/usr/local/vpnserver
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_BROADCAST CAP_NET_RAW CAP_SYS_NICE CAP_SYS_ADMIN CAP_SETUID
+
+[Install]
+WantedBy=multi-user.target
+EOF
