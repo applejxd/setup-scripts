@@ -29,7 +29,7 @@ cd ~/src
 sudo cp -rp vpnserver /usr/local/
 sudo chown -R root:root /usr/local/vpnserver/
 
-cat <<EOF > /etc/systemd/system/vpnserver.service
+sudo tee /etc/systemd/system/vpnserver.service <<EOF >/dev/null
 [Unit]
 Description=SoftEther VPN Server
 After=network.target auditd.service
