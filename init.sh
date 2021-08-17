@@ -32,27 +32,67 @@ sudo chown -R root:root /usr/local/vpnserver/
 sudo tee /etc/systemd/system/vpnserver.service <<EOF >/dev/null
 [Unit]
 Description=SoftEther VPN Server
-After=network.target auditd.service
-ConditionPathExists=!/usr/local/vpnserver/do_not_run
-
+After=network.target
+ 
 [Service]
 Type=forking
-EnvironmentFile=-/usr/local/vpnserver
-ExecStart=/usr/local/vpnserver/vpnserver start
-ExecStop=/usr/local/vpnserver/vpnserver stop
-KillMode=process
-Restart=on-failure
-
-# Hardening
-PrivateTmp=yes
-ProtectHome=yes
-ProtectSystem=full
-ReadOnlyDirectories=/
-ReadWriteDirectories=-/usr/local/vpnserver
-CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_BROADCAST CAP_NET_RAW CAP_SYS_NICE CAP_SYS_ADMIN CAP_SETUID
-
+ExecStart=/opt/vpnserver.sh start
+ExecStop=/opt/vpnserver.sh stop
+ExecReload=/opt/vpnserver.sh restart
+ 
 [Install]
 WantedBy=multi-user.target
+EOF
+
+sudo tee /opt/vpnserver.sh <<EOF >/dev/null
+#!/bin/sh
+# description: SoftEther VPN Server
+DAEMON=/usr/local/vpnserver/vpnserver
+LOCK=/var/lock/subsys/vpnserver
+test -x $DAEMON || exit 0
+case "$1" in
+start)
+$DAEMON start
+touch $LOCK
+i=0
+while [ $i -lt 10 ]; do
+  sleep 1
+  if [ `nmcli c show | grep tap_vpn | wc -l` -gt 0 ]; then
+    /usr/bin/nmcli connection modify tap_vpn ipv4.method manual ipv4.addresses 192.168.0.252/24 ipv4.gateway 192.168.0.1
+    /usr/bin/nmcli connection down tap_vpn
+    /usr/bin/nmcli connection up tap_vpn
+    logger /opt/vpnserver.sh:tap_vpn ip address set successful
+    break
+  fi
+  i=$((i+1))
+done
+;;
+stop)
+$DAEMON stop
+rm $LOCK
+;;
+restart)
+$DAEMON stop
+sleep 3
+$DAEMON start
+i=0
+while [ $i -lt 10 ]; do
+  sleep 1
+  if [ `nmcli c show | grep tap_vpn | wc -l` -gt 0 ]; then
+    /usr/bin/nmcli connection modify tap_vpn ipv4.method manual ipv4.addresses 192.168.0.252/24 ipv4.gateway 192.168.0.1
+    /usr/bin/nmcli connection down tap_vpn
+    /usr/bin/nmcli connection up tap_vpn
+    logger /opt/vpnserver.sh:tap_vpn ip address set successful
+    break
+  fi
+  i=$((i+1))
+done
+;;
+*)
+echo "Usage: $0 {start|stop|restart}"
+exit 1
+esac
+exit 0
 EOF
 
 sudo systemctl daemon-reload
