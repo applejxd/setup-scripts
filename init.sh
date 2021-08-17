@@ -1,7 +1,7 @@
 #!/bin/sh
 
-read -sp "Input IP address for virtual hub " hub_ip
-read -sp "Input IP address for router (gateway)" router_ip
+read -sp "Input IP address for virtual hub: " hub_ip
+read -sp "Input IP address for router (gateway): " router_ip
 
 sudo apt update
 
