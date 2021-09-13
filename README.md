@@ -1,7 +1,4 @@
-# softether-setup
-Set SoftEther up in Ubuntu
+# setup-scripts
 
-## How to Install 
-```shell
-bash -c "$(curl -L https://raw.githubusercontent.com/applejxd/softether-setup/main/init.sh)"
-```
+Several scripts to make development environments.
+The descriptions are stored into each folders.
