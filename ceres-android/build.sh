@@ -56,7 +56,6 @@ cmake \
 -DANDROID_ABI=arm64-v8a \
 -DANDROID_STL=c++_shared \
 -DANDROID_NATIVE_API_LEVEL=android-29 \
--DBUILD_SHARED_LIBS=OFF \
 -DMINIGLOG=ON \
 ..
 cmake \
@@ -66,7 +65,6 @@ cmake \
 -DANDROID_ABI=arm64-v8a \
 -DANDROID_STL=c++_shared \
 -DANDROID_NATIVE_API_LEVEL=android-29 \
--DBUILD_SHARED_LIBS=OFF \
 -DMINIGLOG=ON \
 ..
 make -j3
