@@ -58,7 +58,7 @@ sudo chown -R root:root /usr/local/vpnserver/
 # systemd #
 ###########
 
-# cf. https://qiita.com/rimksky/items/e169f9af83ce472b4ce3
+# cf. https://dsp74118.blogspot.com/2016/02/vpssoftether-vpnlan.html
 
 echo "$password" | sudo -S -E tee /etc/systemd/system/vpnserver.service <<EOF >/dev/null
 [Unit]
