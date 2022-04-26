@@ -40,7 +40,7 @@ file_name=$(echo $response | jq ".assets[38].name" | sed 's/"//g')
 mkdir -p ~/src
 cd ~/src
 wget $download_url
-tar zxvf $file_name
+tar -zxvf $file_name
 
 # Build
 cd vpnserver
