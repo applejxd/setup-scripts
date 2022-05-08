@@ -32,7 +32,8 @@ response=$(curl https://api.github.com/repos/SoftEtherVPN/SoftEtherVPN_Stable/re
 #download_url=$(echo $response | jq ".assets[35].browser_download_url" | sed 's/"//g'
 # Get download URL (arm64-64bit)
 download_url=$(echo $response | jq ".assets[34].browser_download_url" | sed 's/"//g')
-file_name=$(echo $response | jq ".assets[35].name" | sed 's/"//g')
+#file_name=$(echo $response | jq ".assets[35].name" | sed 's/"//g')
+file_name=$(echo $response | jq ".assets[34].name" | sed 's/"//g')
 
 # Download
 mkdir -p ~/src
